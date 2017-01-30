@@ -5,7 +5,6 @@ class TimelinesController < ApplicationController
     # タイムラインを取得
     @timeline = Timeline.includes(:user).not_reply.user_filter(params[:filter_user_id]).order('updated_at DESC')
     @users = User.all
-    
     if params[:reply_id]
       # 返信時は返信のタイムライン情報を取得
       @reply_timeline = Timeline.find(params[:reply_id])
@@ -32,6 +31,12 @@ class TimelinesController < ApplicationController
     else
       flash[:alert] = timeline.errors.full_messages
     end
+    redirect_to action: :index
+  end
+  
+  def destroy
+    timeline = Timeline.find(params[:id])
+    timeline.destroy
     redirect_to action: :index
   end
   
